@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Comp 426 Final Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <!-- Bootstrap Required CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="./style.css">
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-fixed-top navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">426 Final Project</a>
+            </div>
+            <button type="button" id="reserveButton" class="btn btn-light navbar-btn">Book a New Flight!</button>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" id='userdropdown'>
+                    <a class="dropdown-toggle" data-toggle="dropdown" id='username'>User Name
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a id="bookingInfo">My Booking Info</a></li>
+                        <li><a id="accountInfo">Account Info</a></li>
+                        <li><a id="preferences">My Preferences</a></li>
+                    </ul>
+                </li>
+                <li><a><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><a><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="carouselAirport" class="carousel slide" data-interval="3000" data-ride="carousel">
+        <div class="carousel-inner">
+            <div class="item active">
+                <img id="carousel1" src="./plane.jpg" alt="Plane">
+                <div class="carousel-caption">
+                    <h3 id="carousel1header">Plane</h3>
+                </div>
+            </div>
+
+            <div class="item">
+                <img id="carousel2" src="./electricplane.jpg" alt="Electric Plane">
+                <div class="carousel-caption">
+                    <h3 id='carousel2header'>Plane2</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h1 class="text-center display-1">426 Final Project</h1>
+    <blockquote class="blockquote">
+        <p class="mb-0">I'm in love with cities I've never been to and people I've never met.</p>
+        <footer class="blockquote-footer">John Green</footer>
+    </blockquote>
+
+    <!-- Bootstrap Required Javascript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
