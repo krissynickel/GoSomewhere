@@ -29,7 +29,9 @@ $(document).ready(function() {
     });
     $('#register').on('click', function() {
         setUpRegister();
-    })
+    });
+
+    setUpHome();
 
     carouselTime = window.setInterval(function() {
         let newAirport = airports[Math.floor(Math.random() * airports.length)];
@@ -89,9 +91,26 @@ let setUpRegister = function() {
 
     let registerButton = $('<button class="btn btn-lg btn-primary btn-block" type="button">Register</button>');
     registerDiv.append(registerButton);
+    registerDiv.append('<div id="registerMistake"></div>');
     registerButton.on('click', function() {
         register();
     });
+}
+
+let setUpHome = function() {
+    $('body').children().not('.navbar').remove();
+    let body = $('body');
+
+    let carouselDiv = $('<div id="carouselAirport" class="carousel slide" data-interval="3000" data-ride="carousel"></div>');
+    let carouselInner = $('<div class="carousel-inner"></div>');
+    carouselDiv.append(carouselInner);
+    carouselInner.append('<div class="item active"><img id="carousel1" src="./plane.jpg" alt="Plane"><div class="carousel-caption"><h3 id="carousel1header">Plane</h3></div></div>');
+    carouselInner.append('<div class="item"><img id="carousel2" src="./electricplanep.jpg" alt="Electric Plane"><div class="carousel-caption"><h3 id="carousel2header">Plane 2</h3></div></div>');
+    body.append(carouselDiv);
+
+    body.append('<h1 class="text-center display-1">426 Final Project</h1>');
+    body.append('<blockquote class="blockquote"></blockquote>');
+    $('blockquote').append('<p class="mb-0">I\'m in love with cities I\'ve never been to and people I\'ve never met.</p><footer class="blockquote-footer">John Green</footer>');
 }
 
 let register = function() {
@@ -109,9 +128,20 @@ let register = function() {
         xhrFields: {withCredentials: true},
         success: (response) => {
             console.log(response);
+            if(response.hasOwnProperty('username')) {
+                setUpHome();
+                $('#username').text(response.username);
+                $('#username').show();
+                $('#reserveButton').show();
+            }
+            
         },
-        error: (e) => {
-            console.log(e);
+        error: (response) => {
+            console.log(response.responseJSON.status);
+            if(response.responseJSON.status == 409) {
+                $('#registerMistake').empty();
+                $('#registerMistake').append('<ul><li>A user already exists with that username.</li><ul>');
+            }
         }
     });
 }
