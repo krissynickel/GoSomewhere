@@ -1,4 +1,4 @@
-let root = 'http://comp426.cs.unc.edu:3001/'
+let root = 'http://comp426.cs.unc.edu:3001/';
 let flickr = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=';
 
 let carouselTime;
@@ -21,6 +21,9 @@ $(document).ready(function() {
         }
     });
 
+    $('.navbar-brand').on('click', function() {
+        setUpHome();
+    });
     $('#userdropdown').hide();
     $('#reserveButton').hide();
 
@@ -36,7 +39,7 @@ $(document).ready(function() {
     carouselTime = window.setInterval(function() {
         let newAirport = airports[Math.floor(Math.random() * airports.length)];
         let newAirportCity = newAirport['city'];
-        let query = encodeURI(newAirportCity + ' city');
+        let query = encodeURI(newAirportCity);
 
         $.ajax(flickr + query, {
             dataType: 'jsonp',
@@ -127,21 +130,38 @@ let register = function() {
         },
         xhrFields: {withCredentials: true},
         success: (response) => {
-            console.log(response);
             if(response.hasOwnProperty('username')) {
                 setUpHome();
-                $('#username').text(response.username);
-                $('#username').show();
+                $('#username').html(response.username + '<span class="caret"></span>');
+                $('#userdropdown').show();
                 $('#reserveButton').show();
+                $('#login').remove();
+                $('#rightNav').append('<li><a id="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>');
+                $('#logout').on('click', function() {
+                    logout();
+                });
             }
             
         },
         error: (response) => {
-            console.log(response.responseJSON.status);
             if(response.responseJSON.status == 409) {
                 $('#registerMistake').empty();
                 $('#registerMistake').append('<ul><li>A user already exists with that username.</li><ul>');
             }
+        }
+    });
+}
+
+let logout = function() {
+    $.ajax(root + 'sessions', {
+        type: 'DELETE',
+        xhrFields: {withCredentials: true},
+        success: (response) => {
+            console.log(response);
+            setUpHome();
+        },
+        error: (err) => {
+            console.log(err);
         }
     });
 }
