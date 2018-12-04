@@ -8,6 +8,6 @@ body {
     padding-top: 65px;
 }
 
-#registerMistake {
+#registerMistake, #loginMistake {
     color: red;
 }
