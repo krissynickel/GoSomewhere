@@ -1,17 +1,17 @@
-let root = 'http://comp426.cs.unc.edu:3001/';
+let root = 'http://comp426.cs.unc.edu:3001/'
 let flickr = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=';
 
 let carouselTime;
 let carouselBool;
 let airports = [];
 
-$(document).ready(function () {
+$(document).ready(function() {
     $.ajax(root + 'airports', {
         async: false,
         type: 'GET',
-        xhrFields: { withCredentials: true },
+        xhrFields: {withCredentials: true},
         success: (response) => {
-            for (let i = 0; i < response.length; i++) {
+            for(let i = 0; i < response.length; i ++) {
                 airports[i] = response[i];
             }
             airports = response;
@@ -21,25 +21,26 @@ $(document).ready(function () {
         }
     });
 
-    $('.navbar-brand').on('click', function () {
-        setUpHome();
-    });
     $('#userdropdown').hide();
     $('#reserveButton').hide();
 
-    $('#login').on('click', function () {
+    $('#login').on('click', function() {
         setUpLogin();
     });
-    $('#register').on('click', function () {
+    $('#register').on('click', function() {
         setUpRegister();
+    });
+    $('#reserveButton').on('click', function() {
+        setUpReserve();
     });
 
     setUpHome();
 
-    carouselTime = window.setInterval(function () {
+    carouselTime = window.setInterval(function() {
+        console.log("Hey");
         let newAirport = airports[Math.floor(Math.random() * airports.length)];
         let newAirportCity = newAirport['city'];
-        let query = encodeURI(newAirportCity);
+        let query = encodeURI(newAirportCity + ' city');
 
         $.ajax(flickr + query, {
             dataType: 'jsonp',
@@ -47,24 +48,25 @@ $(document).ready(function () {
             success: (result) => {
                 let rand = Math.floor(Math.random() * result.items.length);
                 let src = result.items[rand].media.m;
-                if (carouselBool) {
+                if(carouselBool) {
                     $('#carousel1').attr('src', src);
                     $('#carousel1header').text(newAirportCity);
                 } else {
                     $('#carousel2').attr('src', src);
                     $('#carousel2header').text(newAirportCity);
                 }
-
+        
                 carouselBool = !carouselBool;
             },
             error: (e) => {
-                console.log(e);
+                alert(e);
             }
-        });
+        });        
     }, 3000);
+    
 });
 
-let setUpLogin = function () {
+let setUpLogin = function() {
     $('body').children().not('.navbar').remove();
     window.clearInterval(carouselTime);
 
@@ -75,16 +77,15 @@ let setUpLogin = function () {
     loginDiv.append('<input type="text" id="usernameLogin" class="form-control" placeholder="Username" required autofocus />');
     loginDiv.append('<label for="passwordLogin" class="sr-only">Password</label>');
     loginDiv.append('<input type="password" id="passwordLogin" class="form-control" placeholder="Password" required>');
-
+    
     let loginButton = $('<button class="btn btn-lg btn-primary btn-block" type="button">Sign In</button>');
     loginDiv.append(loginButton);
-    loginDiv.append('<div id="loginMistake"></div>');
     loginButton.on('click', function() {
         login();
     });
 }
 
-let setUpRegister = function () {
+let setUpRegister = function() {
     $('body').children().not('.navbar').remove();
     window.clearInterval(carouselTime);
 
@@ -99,20 +100,21 @@ let setUpRegister = function () {
     let registerButton = $('<button class="btn btn-lg btn-primary btn-block" type="button">Register</button>');
     registerDiv.append(registerButton);
     registerDiv.append('<div id="registerMistake"></div>');
-    registerButton.on('click', function () {
+    registerButton.on('click', function() {
         register();
     });
 }
 
-let setUpHome = function () {
+let setUpHome = function() {
     $('body').children().not('.navbar').remove();
+    $('#reserveButton').html('Book a New Flight');
     let body = $('body');
 
     let carouselDiv = $('<div id="carouselAirport" class="carousel slide" data-interval="3000" data-ride="carousel"></div>');
     let carouselInner = $('<div class="carousel-inner"></div>');
     carouselDiv.append(carouselInner);
     carouselInner.append('<div class="item active"><img id="carousel1" src="./plane.jpg" alt="Plane"><div class="carousel-caption"><h3 id="carousel1header">Plane</h3></div></div>');
-    carouselInner.append('<div class="item"><img id="carousel2" src="./electricplane.jpg" alt="Electric Plane"><div class="carousel-caption"><h3 id="carousel2header">Plane 2</h3></div></div>');
+    carouselInner.append('<div class="item"><img id="carousel2" src="./electricplanep.jpg" alt="Electric Plane"><div class="carousel-caption"><h3 id="carousel2header">Plane 2</h3></div></div>');
     body.append(carouselDiv);
 
     body.append('<h1 class="text-center display-1">426 Final Project</h1>');
@@ -120,7 +122,7 @@ let setUpHome = function () {
     $('blockquote').append('<p class="mb-0">I\'m in love with cities I\'ve never been to and people I\'ve never met.</p><footer class="blockquote-footer">John Green</footer>');
 }
 
-let register = function () {
+let register = function() {
     let username = $('#usernameRegister').val();
     let password = $('#passwordRegister').val();
 
@@ -129,84 +131,119 @@ let register = function () {
         data: {
             'user': {
                 'username': username,
-                'password': password,
+                'password' : password,
             }
         },
-        xhrFields: { withCredentials: true },
+        xhrFields: {withCredentials: true},
         success: (response) => {
-            if (response.hasOwnProperty('username')) {
+            console.log(response);
+            if(response.hasOwnProperty('username')) {
                 setUpHome();
-                $('#username').html(response.username + '<span class="caret"></span>');
-                $('#userdropdown').show();
+                $('#username').text(response.username);
+                $('#username').show();
                 $('#reserveButton').show();
-                $('#register').remove();
-                $('#login').remove();
-                $('#rightNav').append('<li><a id="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>');
-                $('#logout').on('click', function () {
-                    logout();
-                });
             }
-
+            
         },
         error: (response) => {
-            if (response.responseJSON.status == 409) {
+            let responseCode = response.responseJSON.status;
+            if(responseCode == 409) {
                 $('#registerMistake').empty();
                 $('#registerMistake').append('<ul><li>A user already exists with that username.</li><ul>');
+            } else if(responseCode == 422) {
+                $('#registerMistake').empty();
+                $('#registerMistake').append('<ul><li>Your password must have at least 6 characters.</li></ul>');
             }
         }
     });
 }
 
-let login = function () {
+let login = function() {
+    console.log("clicked");
     let username = $('#usernameLogin').val();
     let password = $('#passwordLogin').val();
+    
     $.ajax(root + 'sessions', {
         type: 'POST',
         data: {
             'user': {
                 'username': username,
-                'password': password,
+                'password' : password,
             }
         },
-        xhrFields: { withCredentials: true },
+        xhrFields: {withCredentials: true},
         success: (response) => {
             setUpHome();
             $('#username').text(username);
-            $('#userdropdown').show();
+            $('#username').show();
             $('#reserveButton').show();
-            $('#register').remove();
-            $('#login').remove();
-            $('#rightNav').append('<li><a id="logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>');
-            $('#logout').on('click', function() {
-                logout();
-            });
         }, error: (response) => {
-            if(response.status == 401) {
-                $('#loginMistake').empty();
-                $('#loginMistake').append('<ul><li>Either your username or password are incorrect</li></ul>');
-            }
+            alert("rip u lmao")
         }
+        
+        
+        
     }); //end ajax
+    
+    
 }
 
-let logout = function () {
-    $.ajax(root + 'sessions', {
-        type: 'DELETE',
-        xhrFields: { withCredentials: true },
-        success: () => {
-            setUpHome();
-            $('#logout').remove();
-            $('#rightNav').append('<li><a id="register"><span class="glyphicon glyphicon-user"></span> Register</a></li>');
-            $('#rightNav').append('<li><a id="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>');
-            $('#login').on('click', function() {
-                setUpLogin();
-            });
-            $('#register').on('click', function() {
-                setUpRegister();
-            });
-        },
-        error: (err) => {
-            console.log(err);
+let setUpReserve = function() {
+    homeNow = false;
+    console.log("made ot");
+    $('body').children().not('.navbar').remove();
+    $('#reserveButton').hide();
+    let homeButton = $('<button data-brackets-id="13" id="homeButton" class="btn btn-light navbar-btn">Home</button>');
+    $('.navbar-header').append(homeButton);
+    $('#homeButton').on('click', function() {
+        $('#homeButton').remove();
+        $('#reserveButton').show();
+        setUpHome(); 
+    });
+    let reserveDiv = $('<div class="container"></div>');
+    $('body').append(reserveDiv);
+    
+    let fromAirport = $('<form autocomplete="off"> <input id="fromAirport" type="text" placeholder="Depart From"> </form>');
+    reserveDiv.append(fromAirport);
+    
+    
+    let toAirport = $('<form autocomplete="off"> <input id="toAirport" type="text" placeholder="Arrive At"> </form>');
+    reserveDiv.append(toAirport);
+    let dateLeave = $('<input type="date" id="datepicker" value="2018-12-03">');
+    reserveDiv.append(dateLeave);
+    let dateCome = $('<input type="date" id="datepicker" value="2018-12-03">');
+    reserveDiv.append(dateCome);
+    
+    
+    
+    
+    $.ajax(root + 'airports', {
+        type: 'GET',
+        xhrFields: {withCredentials: true},
+        success: (response) => {
+            for (let i = 0; i < response.length; i++) {
+                airports[i] = response[i].name + " - " + response[i].code + " - " + response[i].city;
+            }
+            console.log(airports);
+        }, error: (response) => {
+            alert("rip u lmao")
         }
+        
+    });
+    
+}
+
+
+
+let autocomplete = function(text, air) {
+    let current; 
+    text.addEventListener("a", function(arg) {
+        
     });
 }
+
+
+
+
+
+
