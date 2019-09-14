@@ -11,3 +11,44 @@ body {
 #registerMistake, #loginMistake {
     color: red;
 }
+
+.middle {
+    vertical-align: middle;
+}
+
+#roundtrip, #oneway {
+    width: 100%;   
+}
+
+#buttons > div {
+    display: flex;
+    justify-content: center;
+}
+
+#roundtrip:hover, #oneway:hover, #multicity:hover, .book:hover, .choice:hover, .destchoice:hover {
+    background-color: #767676;
+    transition-duration: 0.4s;
+}
+
+.selected, .selectedDest, .selectedChoice {
+    background-color: #767676;
+}
+
+#results {
+    overflow-y: auto;
+}
+
+.choices {
+    max-height: 50px;
+}
+
+#fromChoice, #destChoice {
+    overflow-y: auto;
+    max-height: 75px;
+}
+
+.inline > div, .inline > button {
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+}
